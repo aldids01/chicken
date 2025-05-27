@@ -19,7 +19,7 @@ class BirdReceivedResource extends Resource
     protected static ?string $model = BirdReceived::class;
     protected static ?string $recordTitleAttribute = 'batch_number';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = "Checklist";
 
     public static function form(Form $form): Form
     {

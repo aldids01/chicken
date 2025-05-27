@@ -20,8 +20,9 @@ use Illuminate\Support\Number;
 class CoolingVanResource extends Resource
 {
     protected static ?string $model = CoolingVan::class;
+    protected static ?string $modelLabel = "Cooling Van Logbook";
+    protected static ?string $navigationGroup = "Logbook";
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {

@@ -3,10 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UtilityLineItem extends Model
 {
-    use SoftDeletes;
     protected $guarded = [];
+    public function utility():BelongsTo
+    {
+        return $this->belongsTo(UtilityFacility::class, 'utility_id');
+    }
+    public function items():HasMany
+    {
+        return $this->hasMany(UtilityItem::class, 'item_id');
+    }
 }

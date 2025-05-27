@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class BlastFreezerResource extends Resource
 {
     protected static ?string $model = BlastFreezer::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = "Blast Freezer Logbook";
+    protected static ?string $navigationGroup = "Logbook";
 
     public static function form(Form $form): Form
     {
@@ -29,10 +29,18 @@ class BlastFreezerResource extends Resource
                 Forms\Components\TimePicker::make('time_in'),
                 Forms\Components\Textarea::make('product_description')
                     ->columnSpanFull(),
+                Forms\Components\Select::make('package_id')
+                    ->relationship('package', 'name')
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->columnSpanFull()
+                            ->maxLength(255),
+                        Forms\Components\Textarea::make('description')
+                            ->columnSpanFull(),
+                    ]),
                 Forms\Components\TextInput::make('quality')
                     ->maxLength(255),
-                Forms\Components\Select::make('package_id')
-                    ->relationship('package', 'name'),
                 Forms\Components\TextInput::make('initial_temp')
                     ->numeric(),
                 Forms\Components\TextInput::make('freezer_temp')

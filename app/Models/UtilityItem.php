@@ -9,4 +9,5 @@ class UtilityItem extends Model
 {
     use SoftDeletes;
     protected $guarded = [];
+
 }

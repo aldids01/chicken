@@ -22,7 +22,7 @@ class MaterialInventoryCheckResource extends Resource
 {
     protected static ?string $model = MaterialInventoryCheck::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = "Checklist";
 
     public static function form(Form $form): Form
     {
@@ -37,7 +37,15 @@ class MaterialInventoryCheckResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('item_id')
                             ->relationship('item', 'name')
-                            ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->columnSpanFull()
+                                    ->maxLength(255),
+                                Forms\Components\Textarea::make('description')
+                                    ->columnSpanFull(),
+                            ]),
                         Forms\Components\TextInput::make('available_quantity')
                             ->required()
                             ->reactive()

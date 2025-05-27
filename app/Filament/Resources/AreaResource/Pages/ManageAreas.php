@@ -15,7 +15,7 @@ class ManageAreas extends ManageRecords
     {
         return [
             Actions\CreateAction::make()
-                ->modalWidth(MaxWidth::Small)
+                ->modalWidth(MaxWidth::FitContent)
                 ->slideOver(),
         ];
     }

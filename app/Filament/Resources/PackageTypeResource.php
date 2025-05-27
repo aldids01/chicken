@@ -19,7 +19,7 @@ class PackageTypeResource extends Resource
     protected static ?string $model = PackageType::class;
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = "Parameters";
 
     public static function form(Form $form): Form
     {

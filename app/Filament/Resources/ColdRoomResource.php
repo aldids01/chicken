@@ -17,8 +17,8 @@ class ColdRoomResource extends Resource
 {
     protected static ?string $model = ColdRoom::class;
     protected static ?string $recordTitleAttribute = 'name';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = "Cold Room (Storage) Logbook";
+    protected static ?string $navigationGroup = "Logbook";
 
     public static function form(Form $form): Form
     {

@@ -1,0 +1,127 @@
+.logbook-container {
+    width: 100%;
+    margin:auto;
+    background-color: #fff;
+    padding: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+}
+
+.company-name {
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+header h2 {
+    font-size: 1.8em;
+    color: #34495e;
+    margin-top: 0;
+    text-transform: uppercase;
+}
+
+.header-details {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+.header-details p {
+    margin: 5px 0;
+}
+
+.header-details span {
+    border-bottom: 1px dashed #999;
+    padding-bottom: 2px;
+    display: inline-block;
+    min-width: 150px;
+}
+
+.logbook-table-section {
+    margin-bottom: 30px;
+    overflow-x: auto; /* Enables horizontal scrolling for tables */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+table, th, td {
+    border: 1px solid #000000;
+}
+
+th, td {
+    padding: 10px 15px;
+    text-align: left;
+    white-space: wrap; /* Prevents text wrapping in table cells */
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #555;
+    text-transform: capitalize;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Specific adjustments for the multi-page logbook table */
+.page-2-table {
+    margin-top: 40px; /* Separates the two tables visually if on the same page */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .logbook-container {
+        padding: 15px;
+    }
+
+    .company-name {
+        font-size: 2em;
+    }
+
+    header h2 {
+        font-size: 1.5em;
+    }
+
+    th, td {
+        padding: 8px 10px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 480px) {
+    .company-name {
+        font-size: 1.8em;
+    }
+
+    header h2 {
+        font-size: 1.2em;
+    }
+
+    .header-details {
+        font-size: 0.9em;
+    }
+
+    th, td {
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
+}

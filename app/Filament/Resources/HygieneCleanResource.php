@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Torgodly\Html2Media\Tables\Actions\Html2MediaAction;
 
 class HygieneCleanResource extends Resource
 {
@@ -84,6 +85,22 @@ class HygieneCleanResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
+                    Html2MediaAction::make('print')
+                        ->print() // Enable print option
+                        ->preview() // Enable preview option
+                        ->filename(fn($record) => 'hygiene_cleanliness_checklist'.$record->id ) // Custom file name
+                        ->savePdf() // Enable save as PDF option
+                        ->requiresConfirmation() // Show confirmation modal
+                        ->pagebreak('section', ['css', 'legacy'])
+                        ->orientation('portrait') // Portrait orientation
+                        ->format('a4', 'mm') // A4 format with mm units
+                        ->enableLinks() // Enable links in PDF
+                        ->margin([0, 2, 0, 2]) // Set custom margins
+                        ->modalWidth(MaxWidth::FitContent)
+                        ->modalIcon('heroicon-o-printer')
+                        ->icon('heroicon-o-printer')
+                        ->slideOver()
+                        ->content(fn($record) => view('output.hygiene', ['record' => $record])),
                     Tables\Actions\ViewAction::make()
                         ->slideOver()
                         ->modalWidth(MaxWidth::FitContent),

@@ -37,6 +37,7 @@ class HygieneCleanResource extends Resource
                         Forms\Components\Select::make('area_id')
                             ->required()
                             ->relationship('area', 'name')
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->createOptionForm([
                                 Forms\Components\TextInput::make('name')
                                     ->required()

@@ -14,8 +14,8 @@ class UtilityLineItem extends Model
     {
         return $this->belongsTo(UtilityFacility::class, 'utility_id');
     }
-    public function items():HasMany
+    public function item():BelongsTo
     {
-        return $this->hasMany(UtilityItem::class, 'item_id');
+        return $this->belongsTo(UtilityItem::class, 'item_id');
     }
 }

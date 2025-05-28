@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Torgodly\Html2Media\Tables\Actions\Html2MediaAction;
 
 class ProcessingResource extends Resource
 {
@@ -33,7 +34,13 @@ class ProcessingResource extends Resource
                 Forms\Components\TextInput::make('number_of_birds_processed')
                     ->numeric(),
                 Forms\Components\DateTimePicker::make('chilling_time'),
-                Forms\Components\TextInput::make('portioning_done')
+                Forms\Components\ToggleButtons::make('portioning_done')
+                    ->grouped()
+                    ->inline()
+                    ->options([
+                        'Yes' =>   "Yes",
+                        'No' => "No",
+                    ])
                     ->required(),
                 Forms\Components\TextInput::make('whole_birds_package')
                     ->maxLength(255),
@@ -154,6 +161,22 @@ class ProcessingResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
+                    Html2MediaAction::make('print')
+                        ->print() // Enable print option
+                        ->preview() // Enable preview option
+                        ->filename(fn($record) => 'processing_logbook'.$record->id ) // Custom file name
+                        ->savePdf() // Enable save as PDF option
+                        ->requiresConfirmation() // Show confirmation modal
+                        ->pagebreak('section', ['css', 'legacy'])
+                        ->orientation('landscape') // Portrait orientation
+                        ->format('a4', 'mm') // A4 format with mm units
+                        ->enableLinks() // Enable links in PDF
+                        ->margin([0, 2, 0, 2]) // Set custom margins
+                        ->modalWidth(MaxWidth::FitContent)
+                        ->modalIcon('heroicon-o-printer')
+                        ->icon('heroicon-o-printer')
+                        ->slideOver()
+                        ->content(fn($record) => view('output.processing', ['record' => $record])),
                     Tables\Actions\ViewAction::make()
                         ->slideOver()
                         ->modalWidth(MaxWidth::FitContent),

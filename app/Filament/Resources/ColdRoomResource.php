@@ -8,10 +8,12 @@ use App\Models\ColdRoom;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Torgodly\Html2Media\Tables\Actions\Html2MediaAction;
 
 class ColdRoomResource extends Resource
 {
@@ -26,16 +28,19 @@ class ColdRoomResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('batch_number')
                     ->maxLength(255),
-                Forms\Components\TimePicker::make('time_in'),
+                Forms\Components\DateTimePicker::make('time_in'),
                 Forms\Components\Textarea::make('product_description')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('quality')
+                    ->label('Quality (kg)')
                     ->maxLength(255),
                 Forms\Components\Select::make('package_id')
                     ->relationship('package', 'name'),
                 Forms\Components\TextInput::make('blast_freezer')
+                    ->label('Blast Freezer (°C)')
                     ->numeric(),
                 Forms\Components\TextInput::make('cold_room_temp')
+                    ->label('Cold Room Temp (°C)')
                     ->numeric(),
                 Forms\Components\Select::make('transferred_by_id')
                     ->columnSpanFull()
@@ -85,11 +90,33 @@ class ColdRoomResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Html2MediaAction::make('print')
+                        ->print() // Enable print option
+                        ->preview() // Enable preview option
+                        ->filename(fn($record) => 'cold_room_logbook'.$record->id ) // Custom file name
+                        ->savePdf() // Enable save as PDF option
+                        ->requiresConfirmation() // Show confirmation modal
+                        ->pagebreak('section', ['css', 'legacy'])
+                        ->orientation('landscape') // Portrait orientation
+                        ->format('a4', 'mm') // A4 format with mm units
+                        ->enableLinks() // Enable links in PDF
+                        ->margin([0, 2, 0, 2]) // Set custom margins
+                        ->modalWidth(MaxWidth::FitContent)
+                        ->modalIcon('heroicon-o-printer')
+                        ->icon('heroicon-o-printer')
+                        ->slideOver()
+                        ->content(fn($record) => view('output.coldRoom', ['record' => $record])),
+                    Tables\Actions\ViewAction::make()
+                        ->modalWidth(MaxWidth::FitContent)
+                        ->slideOver(),
+                    Tables\Actions\EditAction::make()
+                        ->modalWidth(MaxWidth::FitContent)
+                        ->slideOver(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

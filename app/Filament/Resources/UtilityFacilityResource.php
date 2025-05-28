@@ -8,10 +8,12 @@ use App\Models\UtilityFacility;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Torgodly\Html2Media\Tables\Actions\Html2MediaAction;
 
 class UtilityFacilityResource extends Resource
 {
@@ -33,7 +35,8 @@ class UtilityFacilityResource extends Resource
                     ->schema([
                        Forms\Components\Select::make('item_id')
                             ->required()
-                            ->relationship('items', 'name')
+                            ->relationship('item', 'name')
+                           ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->createOptionForm([
                                 Forms\Components\TextInput::make('name')
                                     ->required()
@@ -80,11 +83,33 @@ class UtilityFacilityResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Html2MediaAction::make('print')
+                        ->print() // Enable print option
+                        ->preview() // Enable preview option
+                        ->filename(fn($record) => 'utility_and_facility_checklist'.$record->id ) // Custom file name
+                        ->savePdf() // Enable save as PDF option
+                        ->requiresConfirmation() // Show confirmation modal
+                        ->pagebreak('section', ['css', 'legacy'])
+                        ->orientation('portrait') // Portrait orientation
+                        ->format('a4', 'mm') // A4 format with mm units
+                        ->enableLinks() // Enable links in PDF
+                        ->margin([0, 2, 0, 2]) // Set custom margins
+                        ->modalWidth(MaxWidth::FitContent)
+                        ->modalIcon('heroicon-o-printer')
+                        ->icon('heroicon-o-printer')
+                        ->slideOver()
+                        ->content(fn($record) => view('output.utility', ['record' => $record])),
+                    Tables\Actions\ViewAction::make()
+                        ->slideOver()
+                        ->modalWidth(MaxWidth::FitContent),
+                    Tables\Actions\EditAction::make()
+                        ->slideOver()
+                        ->modalWidth(MaxWidth::FitContent),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
